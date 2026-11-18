@@ -3,134 +3,1690 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pullers chapel - Welcome</title>
+    <title id="page-title">Pullers Chapel - Welcome</title>
     <style>
         :root {
             --primary-color: #1a365d;
             --accent-color: #d69e2e;
-            --bg-light: #f7fafc;
+            --bg-light: #f8fafc;
             --text-dark: #2d3748;
+            --transition: all 0.3s ease;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-dark);
-            line-height: 1.6;
-            background-color: var(--bg-light);
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+        
+        /* Navigation */
+        header { background: var(--primary-color); color: white; display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 40px; width: 40px; object-fit: cover; border-radius: 50%; border: 2px solid var(--accent-color); display: none; }
+        .logo { font-size: 1.4rem; font-weight: bold; letter-spacing: 0.5px; }
+
+        /* Desktop vs Mobile Nav */
+        nav { display: flex; align-items: center; gap: 6px; }
+        nav a { color: white; text-decoration: none; font-weight: 500; cursor: pointer; font-size: 0.85rem; padding: 6px 10px; border-radius: 6px; transition: var(--transition); }
+        nav a:hover, nav a.active { color: var(--accent-color); background: rgba(255,255,255,0.1); }
+
+        /* Hamburger Menu Toggle Button (Hidden on Desktop) */
+        .menu-toggle { display: none; background: none; border: none; color: white; font-size: 1.6rem; cursor: pointer; padding: 5px; }
+
+        /* Sections */
+        .page-section { display: none; padding: 40px 4%; min-height: 80vh; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s ease-in-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Hero */
+        .hero { background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1350&q=80') center/cover; color: white; text-align: center; padding: 80px 15px; border-radius: 12px; margin-top: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; font-weight: 800; letter-spacing: -0.5px; }
+        .hero p { font-size: 1.1rem; margin-bottom: 25px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0.95; }
+        .btn { background: var(--accent-color); color: #1a365d; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block; cursor: pointer; border: none; text-align: center; transition: var(--transition); box-shadow: 0 4px 12px rgba(214, 158, 46, 0.3); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(214, 158, 46, 0.4); }
+
+        /* Quick Action Grid & Grids */
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 30px; }
+        .action-card { background: white; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,0.04); border-top: 4px solid var(--primary-color); cursor: pointer; transition: var(--transition); }
+        .action-card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.08); border-color: var(--accent-color); }
+        .action-card h3 { color: var(--primary-color); margin-bottom: 10px; font-size: 1.2rem; }
+        .action-card p { color: #64748b; font-size: 0.9rem; margin-bottom: 15px; }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); border: 1px solid #edf2f7; }
+        .card h3 { color: var(--primary-color); margin-bottom: 12px; font-size: 1.3rem; }
+
+        /* Event Flyer Card Styles */
+        .event-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.04); border: 1px solid #edf2f7; transition: var(--transition); display: flex; flex-direction: column; }
+        .event-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        .event-img { width: 100%; height: 220px; object-fit: cover; background: #e2e8f0; }
+        .event-content { padding: 20px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+
+        /* Live Stream Badge & Container */
+        .live-badge { display: inline-flex; align-items: center; gap: 8px; background: #fee2e2; color: #dc2626; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-bottom: 20px; animation: pulse 2s infinite; }
+        .offline-badge { display: inline-flex; align-items: center; gap: 8px; background: #e2e8f0; color: #475569; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-bottom: 20px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #0f172a; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-top: 15px; }
+        .video-container iframe, .video-container div { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* Pastor Spotlight Section (Enlarged Photo + Full Bio & Appointment Integration) */
+        .pastor-section-wrapper { margin-top: 40px; padding: 35px 20px; border-radius: 16px; background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%); border: 1px solid #bae6fd; }
+        .pastor-profile { display: flex; flex-wrap: wrap; gap: 30px; align-items: center; background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+        .pastor-img { width: 220px; height: 220px; object-fit: cover; border-radius: 50%; border: 5px solid white; box-shadow: 0 8px 24px rgba(0,0,0,0.15); flex-shrink: 0; margin: 0 auto; }
+        .pastor-info { flex: 1; min-width: 250px; }
+
+        /* Devotional Card Layout */
+        .devotional-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.06); border-top: 6px solid var(--primary-color); max-width: 800px; margin: 0 auto; }
+        .dev-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #edf2f7; padding-bottom: 15px; }
+        .dev-header img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; display: none; border: 2px solid var(--accent-color); }
+        .dev-header-text h4 { color: var(--primary-color); font-size: 1.1rem; }
+        .dev-header-text span { font-size: 0.85rem; color: #64748b; }
+        .dev-body-content { margin-bottom: 25px; }
+        .dev-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; border-top: 1px solid #edf2f7; padding-top: 15px; flex-wrap: wrap; gap: 15px; }
+        .dev-pastor-stamp { text-align: center; }
+        .dev-pastor-stamp img { width: 55px; height: 55px; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent-color); background: #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .dev-pastor-stamp span { display: block; font-size: 0.75rem; color: #475569; margin-top: 4px; font-weight: bold; }
+
+        /* Love Button Styling */
+        .love-btn { background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition); }
+        .love-btn:hover { background: #ffe4e6; transform: scale(1.05); }
+
+        /* Receipt Modal / Box */
+        #receipt-box { display: none; background: #fff; border: 3px double var(--primary-color); padding: 30px; border-radius: 12px; max-width: 600px; margin: 20px auto; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        @media print {
+            body * { visibility: hidden; }
+            #receipt-box, #receipt-box * { visibility: visible; }
+            #receipt-box { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+            .no-print { display: none !important; }
         }
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        header h1 {
-            font-size: 1.5rem;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: 500;
-        }
-        nav a:hover {
-            color: var(--accent-color);
-        }
-        .hero {
-            background: linear-gradient(rgba(26, 54, 93, 0.8), rgba(26, 54, 93, 0.8)), url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80') center/cover;
-            color: white;
-            text-align: center;
-            padding: 6rem 2rem;
-        }
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
-        }
-        .btn {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .btn:hover {
-            background-color: #b7791f;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .card h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 3rem;
-            font-size: 0.9rem;
+
+        /* Admin Dashboard Panel */
+        #admin-panel { background: white; border: 2px solid var(--primary-color); padding: 25px; border-radius: 12px; max-width: 800px; margin: 10px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        #admin-panel h2 { margin-bottom: 20px; color: var(--primary-color); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 6px; color: #334155; font-size: 0.95rem; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px !important; transition: var(--transition); }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1); }
+        .save-btn { background: var(--primary-color); color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; transition: var(--transition); box-shadow: 0 4px 12px rgba(26, 54, 93, 0.2); }
+        .save-btn:hover { opacity: 0.95; transform: translateY(-1px); }
+
+        /* Submission item boxes in Admin */
+        .submission-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 12px; }
+        .action-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .approve-btn { background: #16a34a; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
+        .delete-btn { background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
+
+        /* Floating Mobile Action Bar */
+        .mobile-float-bar { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: white; box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1500; padding: 10px 10px; justify-content: space-around; gap: 8px; border-top: 1px solid #e2e8f0; }
+        .float-btn { flex: 1; padding: 8px 6px; border-radius: 6px; font-weight: bold; font-size: 0.78rem; border: none; cursor: pointer; text-align: center; }
+        .live-action { background: #fee2e2; color: #dc2626; }
+        .give-action { background: #fef3c7; color: #b45309; }
+        .appnt-action { background: #dbeafe; color: #1e40af; }
+        .pray-action { background: #e0f2fe; color: #0369a1; }
+
+        /* Footer / Socials */
+        footer { background: var(--primary-color); color: white; text-align: center; padding: 25px 5%; margin-top: 50px; }
+        .social-links { margin-top: 12px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .social-links a { color: var(--accent-color); text-decoration: none; font-weight: bold; font-size: 0.95rem; transition: var(--transition); }
+        .social-links a:hover { opacity: 0.8; }
+        .admin-footer-link { display: inline-block; margin-top: 15px; font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; cursor: pointer; transition: var(--transition); }
+        .admin-footer-link:hover { color: var(--accent-color); }
+
+        /* MOBILE RESPONSIVE MEDIA QUERY */
+        @media (max-width: 900px) {
+            .menu-toggle { display: block; }
+            nav { display: none; width: 100%; flex-direction: column; background: var(--primary-color); position: absolute; top: 100%; left: 0; padding: 15px 5%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); gap: 8px; border-top: 1px solid rgba(255,255,255,0.1); }
+            nav.show { display: flex; }
+            nav a { width: 100%; padding: 10px; text-align: left; font-size: 1rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 0.95rem; }
+            .page-section { padding: 30px 4%; }
+            .mobile-float-bar { display: flex; }
+            body { padding-bottom: 65px; }
+            .pastor-profile { text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>PULLERS CHAPEL</h1>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Sermons</a>
-            <a href="#">Contact</a>
+    <header class="no-print">
+        <div class="logo-container">
+            <img id="nav-logo-img" class="logo-img" src="" alt="Logo">
+            <div class="logo" id="brand-logo">Pullers Chapel</div>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        <nav id="nav-menu">
+            <a onclick="switchTab('home'); closeMobileMenu();" id="nav-home" class="active">Home</a>
+            <a onclick="switchTab('about'); closeMobileMenu();" id="nav-about">About</a>
+            <a onclick="switchTab('visit'); closeMobileMenu();" id="nav-visit">Plan Visit</a>
+            <a onclick="switchTab('live'); closeMobileMenu();" id="nav-live" style="color: var(--accent-color); font-weight: bold;">🔴 Watch Live</a>
+            <a onclick="switchTab('events'); closeMobileMenu();" id="nav-events">Events</a>
+            <a onclick="switchTab('announcements'); closeMobileMenu();" id="nav-announcements">Announcements</a>
+            <a onclick="switchTab('sermons'); closeMobileMenu();" id="nav-sermons">Sermons</a>
+            <a onclick="switchTab('devotional'); closeMobileMenu();" id="nav-devotional">Devotionals</a>
+            <a onclick="switchTab('appointment'); closeMobileMenu();" id="nav-appointment" style="color: var(--accent-color); font-weight: bold;">📅 Book Appointment</a>
+            <a onclick="switchTab('prayer'); closeMobileMenu();" id="nav-prayer">Prayer</a>
+            <a onclick="switchTab('giving'); closeMobileMenu();" id="nav-giving">Giving</a>
+            <a onclick="switchTab('contact'); closeMobileMenu();" id="nav-contact">Contact</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <h2>Welcome Home</h2>
-        <p>A community of faith, hope, and love. Join us this week as we worship together and grow in God's word.</p>
-        <a href="#" class="btn">Plan Your Visit</a>
+    <!-- HOME PAGE -->
+    <section id="home" class="page-section active">
+        <div class="hero" id="home-hero-bg">
+            <h1 id="home-heading">Welcome Home</h1>
+            <p id="home-subtext">A vibrant community of faith, hope, and love. Join us this week as we worship together and grow in God's word.</p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="switchTab('live')" class="btn" style="background: #dc2626; color: white;">🔴 Watch Live Service</button>
+                <button onclick="switchTab('appointment')" class="btn" style="background: var(--primary-color); color: white;">📅 Book Appointment</button>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <div class="action-card" onclick="switchTab('live')">
+                <h3>🔴 Live Stream</h3>
+                <p>Join our ongoing or upcoming live Sunday & midweek worship broadcasts.</p>
+                <span style="color: var(--primary-color); font-weight: bold;">Watch Now &rarr;</span>
+            </div>
+            <div class="action-card" onclick="switchTab('appointment')">
+                <h3>📅 Book Appointment</h3>
+                <p>Schedule a personal counseling, prayer session, or meeting with the pastor.</p>
+                <span style="color: var(--primary-color); font-weight: bold;">Book Session &rarr;</span>
+            </div>
+            <div class="action-card" onclick="switchTab('devotional')">
+                <h3>📖 Daily Devotional</h3>
+                <p>Start your day anchored with fresh scripture and powerful daily words.</p>
+                <span style="color: var(--primary-color); font-weight: bold;">Read Today's Word &rarr;</span>
+            </div>
+        </div>
+
+        <!-- PASTOR SPOTLIGHT (Enlarged Photo + Full Bio & Appointment Buttons) -->
+        <div class="pastor-section-wrapper" id="pastor-section-bg">
+            <h2 style="color: var(--primary-color); margin-bottom: 20px; text-align: center; font-size: 1.8rem;">Meet Our Pastor</h2>
+            <div class="pastor-profile">
+                <img id="home-pastor-img-display" class="pastor-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Pastor">
+                <div class="pastor-info">
+                    <h3 id="home-pastor-name" style="font-size: 1.6rem; color: var(--primary-color); margin-bottom: 8px;">Pastor Emmanuel Ofori</h3>
+                    <p id="home-pastor-bio" style="font-size: 0.95rem; color: #475569; margin-bottom: 15px;">Pastor Emmanuel has dedicated over 15 years to pastoral ministry, teaching, and leadership development. With a deep passion for prayer and community transformation, he leads Pullers Chapel with a vision to help every believer discover and walk in their divine purpose.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="openFullBioModal()" class="btn" style="padding: 8px 18px; font-size: 0.9rem; background: var(--primary-color); color: white;">📖 Read Full Biography</button>
+                        <button onclick="switchTab('appointment')" class="btn" style="padding: 8px 18px; font-size: 0.9rem; background: var(--accent-color); color: var(--primary-color);">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APPROVED TESTIMONIES FEED -->
+        <div style="margin-top: 50px;">
+            <h2 style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.8rem; text-align: center;">🌟 Community Testimonies & Praise Reports</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 25px; font-size: 0.95rem;">Rejoice with our members as we share what God has done!</p>
+            <div id="home-testimonies-container">
+                <p style="color: #64748b; font-style: italic; text-align: center;">No approved testimonies yet. Share your testimony in the Prayer tab!</p>
+            </div>
+        </div>
     </section>
 
-    <div class="container">
-        <div class="card">
-            <h3>Service Times</h3>
-            <p><strong>Sunday Worship:</strong> 9:00 AM – 11:30 AM</p>
-            <p style="margin-top: 0.5rem;"><strong>Midweek Prayer (Wednesday):</strong> 6:00 PM – 7:30 PM</p>
+    <!-- LIVE STREAM TAB -->
+    <section id="live" class="page-section">
+        <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+            <div id="live-status-indicator" class="offline-badge">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+                <span>Service is currently OFFLINE</span>
+            </div>
+            
+            <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;" id="live-page-title">Pullers Chapel Live Broadcast</h1>
+            <p style="margin-bottom: 25px; color: #475569; font-size: 1rem;" id="live-page-sub">Join our live worship experience from wherever you are. Sundays @ 9:00 AM & Wednesdays @ 6:00 PM.</p>
+
+            <div class="video-container" id="live-player-box">
+                <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; color: #94a3b8; padding: 40px;">
+                    <h3 style="color: white; margin-bottom: 10px;">Stream is Offline</h3>
+                    <p>Check back during service times or watch our previous sermons in the Media tab.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                <a id="external-stream-link" href="https://youtube.com" target="_blank" class="btn">Watch on YouTube / External App &rarr;</a>
+                <button class="btn" style="background: #e2e8f0; color: #334155;" onclick="switchTab('appointment')">Book an Appointment</button>
+            </div>
         </div>
-        <div class="card">
-            <h3>Our Mission</h3>
-            <p>To spread the gospel, nurture spiritual growth, and serve our local community with compassion and dedication.</p>
+    </section>
+
+    <!-- BOOK AN APPOINTMENT TAB -->
+    <section id="appointment" class="page-section">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem; text-align: center;">📅 Book an Appointment with the Pastor</h1>
+            <p style="margin-bottom: 30px; color: #475569; font-size: 1rem; text-align: center;">Fill out the form below to request a counseling session, prayer, or private meeting.</p>
+            
+            <div class="card">
+                <h3>📝 Appointment Request Form</h3>
+                <p style="margin-bottom: 20px; color: #64748b; font-size: 0.9rem;">Our pastoral team will review your request and reach out via phone or email to confirm your time slot.</p>
+                
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="appt-name" placeholder="e.g., David Mensah">
+                </div>
+                <div class="form-group">
+                    <label>Phone / WhatsApp Number:</label>
+                    <input type="text" id="appt-phone" placeholder="e.g., 024 123 4567">
+                </div>
+                <div class="form-group">
+                    <label>Email Address:</label>
+                    <input type="email" id="appt-email" placeholder="e.g., david@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Purpose of Appointment:</label>
+                    <select id="appt-type">
+                        <option value="Spiritual Counseling">Spiritual Counseling</option>
+                        <option value="Prayer & Deliverance">Prayer & Deliverance</option>
+                        <option value="Baptism / Dedication Consultation">Baptism / Dedication Consultation</option>
+                        <option value="General Pastoral Visit">General Pastoral Visit</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Date & Time:</label>
+                    <input type="datetime-local" id="appt-datetime">
+                </div>
+                <div class="form-group">
+                    <label>Additional Notes / Details (Optional):</label>
+                    <textarea id="appt-notes" rows="3" placeholder="Briefly share what you would like to discuss..."></textarea>
+                </div>
+                <button class="btn" style="width: 100%;" onclick="submitAppointmentRequest()">Submit Appointment Request</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT PAGE -->
+    <section id="about" class="page-section">
+        <h1 id="about-page-heading" style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">About Pullers Chapel</h1>
+        <p id="about-desc" style="margin-bottom: 30px; font-size: 1rem; color: #475569;">Pullers Chapel is dedicated to spreading the gospel, nurturing spiritual growth, and serving our local community with love and compassion.</p>
+        
+        <div class="grid-2">
+            <div class="card">
+                <h3>Our Mission</h3>
+                <p id="about-mission">To win souls for Christ, build believers in the faith, and impact generations through the power of the Holy Spirit.</p>
+            </div>
+            <div class="card">
+                <h3>Our Vision</h3>
+                <p id="about-vision">To be a beacon of hope and a thriving spiritual home reaching communities globally.</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 25px;">
+            <h3>Our Core Values</h3>
+            <p id="about-values" style="white-space: pre-line;">1. Christ-Centeredness
+2. Uncompromising Word of God
+3. Authentic Fellowship
+4. Compassionate Outreach</p>
+        </div>
+    </section>
+
+    <!-- PLAN YOUR VISIT TAB -->
+    <section id="visit" class="page-section">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">Plan Your Visit</h1>
+        <p style="margin-bottom: 30px; color: #475569; font-size: 1rem;">We are so excited to welcome you! Here is everything you need to know before joining us.</p>
+        
+        <div class="grid-2">
+            <div class="card">
+                <h3>⏰ Service Times & Location</h3>
+                <p style="margin-bottom: 10px; color: #334155;"><strong>Sunday Worship Experience:</strong> 9:00 AM – 11:30 AM</p>
+                <p style="margin-bottom: 10px; color: #334155;"><strong>Midweek Prayer & Teaching:</strong> Wednesdays at 6:00 PM</p>
+                <p style="color: #334155;"><strong>Location:</strong> Main Auditorium, Pullers Chapel Street</p>
+            </div>
+            <div class="card">
+                <h3>🚗 What to Expect</h3>
+                <p style="margin-bottom: 10px; color: #334155;"><strong>Parking:</strong> Free parking is available onsite with welcoming ushers to guide you.</p>
+                <p style="margin-bottom: 10px; color: #334155;"><strong>Attire:</strong> Come as you are! Whether casual or formal, you are welcome.</p>
+                <p style="color: #334155;"><strong>Kids Ministry:</strong> Safe, engaging classes are available for children during service.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVENTS & FLYERS TAB -->
+    <section id="events" class="page-section">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">Upcoming Events & Flyers</h1>
+        <p style="margin-bottom: 30px; color: #475569; font-size: 1rem;">Browse our church event flyers and register to reserve your seat.</p>
+        
+        <div id="public-events-container" class="grid-2">
+            <!-- Populated dynamically via JS -->
+        </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS TAB -->
+    <section id="announcements" class="page-section">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">Church Announcements & Notices</h1>
+        <p style="margin-bottom: 30px; color: #475569; font-size: 1rem;">Stay updated with upcoming programs, weekly activities, and church news.</p>
+        
+        <div class="card" style="border-left: 5px solid var(--accent-color); margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase;" id="ann-date-1">Posted Recently</span>
+            <h3 id="ann-title-1" style="margin: 6px 0 10px 0; color: var(--primary-color);">Special Midweek Fasting & Prayer</h3>
+            <p id="ann-body-1" style="color: #334155; font-size: 0.95rem;">Join us this Wednesday at 6:00 PM as we gather for an empowering time of intense prayer and intercession for our families and community.</p>
+        </div>
+
+        <div class="card" style="border-left: 5px solid var(--primary-color);">
+            <span style="font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase;" id="ann-date-2">Upcoming Event</span>
+            <h3 id="ann-title-2" style="margin: 6px 0 10px 0; color: var(--primary-color);">Youth Ministry Outreach Sunday</h3>
+            <p id="ann-body-2" style="color: #334155; font-size: 0.95rem;">Our youth department is hosting a special outreach service this coming Sunday. Come ready to bless lives and fellowship with powerful testimonies!</p>
+        </div>
+    </section>
+
+    <!-- SERMONS & MEDIA GALLERY -->
+    <section id="sermons" class="page-section">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">Media & Sermons Gallery</h1>
+        <p style="margin-bottom: 30px; color: #475569; font-size: 1rem;">Watch or listen to our latest messages from YouTube, Facebook, Telegram, and more.</p>
+        
+        <div class="grid-2" id="sermons-container">
+            <div class="card">
+                <h3 id="sermon-1-title">Walking in Divine Favor</h3>
+                <p id="sermon-1-desc" style="margin-bottom: 15px; color: #64748b; font-size: 0.9rem;">Speaker: Pastor Emmanuel • Sunday Service Message</p>
+                <a id="sermon-1-link" href="https://youtube.com" target="_blank" class="btn" style="padding: 10px 18px; font-size: 0.9rem; width: 100%;">Watch / Listen Online</a>
+            </div>
+            <div class="card">
+                <h3 id="sermon-2-title">The Power of Persistent Prayer</h3>
+                <p id="sermon-2-desc" style="margin-bottom: 15px; color: #64748b; font-size: 0.9rem;">Speaker: Pastor Emmanuel • Midweek Teaching</p>
+                <a id="sermon-2-link" href="https://facebook.com" target="_blank" class="btn" style="padding: 10px 18px; font-size: 0.9rem; width: 100%;">Watch / Listen Online</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAILY DEVOTIONALS -->
+    <section id="devotional" class="page-section">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem; text-align: center;">Daily Devotional</h1>
+        <p style="margin-bottom: 30px; color: #475569; font-size: 1rem; text-align: center;">Start your day anchored in God's word.</p>
+        
+        <div class="devotional-card">
+            <div class="dev-header">
+                <img id="dev-logo-stamp" src="" alt="Logo">
+                <div class="dev-header-text">
+                    <h4 id="dev-church-name">Pullers Chapel Daily Devotional</h4>
+                    <span>Anchor in His Word</span>
+                </div>
+            </div>
+            
+            <div class="dev-body-content">
+                <h3 id="dev-title" style="margin-bottom: 10px; color: var(--primary-color); font-size: 1.3rem;">Strength in Quietness</h3>
+                <p style="font-style: italic; color: #475569; margin-bottom: 15px; font-size: 0.95rem;" id="dev-verse">"In quietness and confidence shall be your strength." - Isaiah 30:15</p>
+                <p id="dev-body" style="font-size: 0.95rem; color: #334155;">True spiritual breakthrough often begins when we quiet the noise of the world and spend intentional time in God's presence. Today, let go of anxiety and trust in His unfailing grace.</p>
+            </div>
+
+            <div class="dev-footer">
+                <button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="shareDevotional()">Share Devotional</button>
+                <div class="dev-pastor-stamp">
+                    <img id="dev-pastor-stamp-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Pastor">
+                    <span id="dev-pastor-name-stamp">Pastor Emmanuel</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRAYER REQUESTS & TESTIMONIES TAB -->
+    <section id="prayer" class="page-section">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem; text-align: center;">Prayer & Testimonies</h1>
+            <p style="margin-bottom: 30px; color: #475569; font-size: 1rem; text-align: center;">"Do not be anxious about anything, but in every situation... present your requests to God." – Philippians 4:6</p>
+            
+            <div class="card">
+                <h3>🙏 Share Your Request or Testimony</h3>
+                <p style="margin-bottom: 18px; color: #64748b; font-size: 0.9rem;">Prayer requests are sent privately to the pastors. Praise reports/testimonies are reviewed by the admin before appearing publicly on the home page.</p>
+                
+                <div class="form-group">
+                    <label>Your Name:</label>
+                    <input type="text" id="prayer-name" placeholder="e.g., Sarah Jenkins">
+                </div>
+                <div class="form-group">
+                    <label>Submission Type:</label>
+                    <select id="prayer-type">
+                        <option value="Prayer Request">Prayer Request (Private to Pastors)</option>
+                        <option value="Praise Report / Testimony">Praise Report / Testimony (Public after approval)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Message:</label>
+                    <textarea id="prayer-msg" rows="4" placeholder="Share details of your request or testimony here..."></textarea>
+                </div>
+                <button class="btn" style="width: 100%;" onclick="submitPrayerForm()">Submit Securely</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- GIVING TAB -->
+    <section id="giving" class="page-section">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;" class="no-print">
+            <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">Tithes & Offerings</h1>
+            <p style="margin-bottom: 30px; color: #475569; font-size: 1rem;">"Each of you should give what you have decided in your heart to give..." - 2 Corinthians 9:7</p>
+        </div>
+
+        <div class="grid-2 no-print" style="max-width: 1000px; margin: 0 auto;">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card">
+                    <h3>🌐 Online Payment Platform</h3>
+                    <p style="margin: 12px 0; color: #64748b; font-size: 0.9rem;">Give securely online using your preferred payment link configured by the church.</p>
+                    <a id="giving-platform-link" href="#" target="_blank" class="btn" style="width: 100%;">Proceed to Secure Giving &rarr;</a>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <h3>📷 Scan to Pay (MoMo QR)</h3>
+                    <p style="margin: 8px 0; color: #64748b; font-size: 0.85rem;">Scan with your mobile money app camera:</p>
+                    <div style="margin: 12px auto; width: 160px; height: 160px; border: 2px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 8px; overflow: hidden;">
+                        <img id="display-qr-img" src="" alt="MoMo QR Code" style="max-width: 100%; max-height: 100%; display: none;">
+                        <span id="no-qr-text" style="color: #94a3b8; font-size: 0.8rem; padding: 10px;">QR Code not uploaded yet</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card">
+                    <h3>📱 Mobile Money & Bank Transfer</h3>
+                    <p style="margin: 8px 0; color: #64748b; font-size: 0.85rem;">Tap any detail below to copy:</p>
+                    <div style="background: var(--bg-light); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent-color); text-align: left; display: flex; flex-direction: column; gap: 8px;">
+                        <div onclick="copyToClipboard('MTN MoMo / Access Bank', 'Network/Bank')" style="cursor: pointer;" title="Click to copy">
+                            <span style="font-size: 0.75rem; color: #64748b; display: block;">Network / Bank:</span>
+                            <strong style="color: var(--primary-color); font-size: 0.9rem;">MTN MoMo / Access Bank 📋</strong>
+                        </div>
+                        <div onclick="copyToClipboard('Pullers Chapel Ministry', 'Account Name')" style="cursor: pointer;" title="Click to copy">
+                            <span style="font-size: 0.75rem; color: #64748b; display: block;">Account Name:</span>
+                            <strong style="color: var(--primary-color); font-size: 0.9rem;">Pullers Chapel Ministry 📋</strong>
+                        </div>
+                        <div onclick="copyToClipboard('0123456789', 'Account Number')" style="cursor: pointer;" title="Click to copy">
+                            <span style="font-size: 0.75rem; color: #64748b; display: block;">Account / MoMo Number:</span>
+                            <strong style="color: var(--primary-color); font-size: 0.9rem;">0123456789 📋</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🧾 Get Payment Receipt</h3>
+                    <p style="margin: 8px 0; color: #64748b; font-size: 0.85rem;">Completed a payment? Generate your official receipt below:</p>
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label style="font-size: 0.85rem;">Your Full Name:</label>
+                        <input type="text" id="rec-name" placeholder="e.g., John Doe">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label style="font-size: 0.85rem;">Amount Given:</label>
+                        <input type="text" id="rec-amount" placeholder="e.g., $50 or GH₵ 200">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label style="font-size: 0.85rem;">Giving Type:</label>
+                        <select id="rec-type" style="padding: 8px;">
+                            <option value="Tithes">Tithes</option>
+                            <option value="Offering">Offering</option>
+                            <option value="Building Fund">Building Fund</option>
+                            <option value="Missions / Outreach">Missions / Outreach</option>
+                        </select>
+                    </div>
+                    <button class="btn" style="width: 100%; padding: 10px; font-size: 0.9rem;" onclick="generateReceipt()">Generate Printable Receipt</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="receipt-box">
+            <div style="text-align: center; border-bottom: 2px solid var(--primary-color); padding-bottom: 12px; margin-bottom: 15px;">
+                <h2 id="receipt-church-name" style="color: var(--primary-color); font-size: 1.5rem;">Pullers Chapel Ministry</h2>
+                <p style="color: #64748b; font-size: 0.85rem;">Official Contribution & Giving Receipt</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem;">
+                <p><strong>Receipt No:</strong> <span id="r-no">PC-2026-001</span></p>
+                <p><strong>Date:</strong> <span id="r-date"></span></p>
+            </div>
+            <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse; font-size: 0.9rem;">
+                <tr style="border-bottom: 1px solid #cbd5e1;">
+                    <th style="text-align: left; padding: 6px; color: var(--primary-color);">Contributor Name</th>
+                    <td style="text-align: right; padding: 6px;" id="r-name-val"></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #cbd5e1;">
+                    <th style="text-align: left; padding: 6px; color: var(--primary-color);">Category</th>
+                    <td style="text-align: right; padding: 6px;" id="r-type-val"></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #cbd5e1;">
+                    <th style="text-align: left; padding: 6px; color: var(--primary-color);">Amount Paid</th>
+                    <td style="text-align: right; padding: 6px; font-weight: bold; color: var(--accent-color);" id="r-amount-val"></td>
+                </tr>
+            </table>
+            <p style="text-align: center; font-style: italic; color: #475569; font-size: 0.85rem; margin-bottom: 20px;">"Each of you should give what you have decided in your heart to give..." - 2 Corinthians 9:7</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 12px; gap: 10px;" class="no-print">
+                <button class="btn" style="padding: 8px 16px; font-size: 0.85rem;" onclick="window.print()">🖨️ Print / Save PDF</button>
+                <button class="btn" style="background: #e2e8f0; color: #334155; padding: 8px 16px; font-size: 0.85rem;" onclick="closeReceipt()">Close</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT & SOCIALS -->
+    <section id="contact" class="page-section">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px; font-size: 2.2rem;">Contact & Social Media</h1>
+        <p style="margin-bottom: 30px; color: #475569; font-size: 1rem;">We would love to connect with you.</p>
+        
+        <div class="grid-2">
+            <div class="card">
+                <h3>Get in Touch</h3>
+                <p style="margin-bottom: 8px; font-size: 0.95rem;"><strong>Email:</strong> info@pullerschapel.org</p>
+                <p style="font-size: 0.95rem;"><strong>Service Times:</strong> Sundays at 9:00 AM</p>
+            </div>
+            <div class="card">
+                <h3>Connect Online</h3>
+                <p style="margin-bottom: 12px; font-size: 0.95rem;">Follow our official ministry channels:</p>
+                <div class="social-links" style="justify-content: flex-start;">
+                    <a href="#" target="_blank">Facebook</a>
+                    <a href="#" target="_blank">YouTube</a>
+                    <a href="#" target="_blank">Instagram</a>
+                    <a href="#" target="_blank">WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADMIN PANEL -->
+    <section id="admin" class="page-section">
+        <div id="admin-panel">
+            <h2>Church Admin Dashboard</h2>
+            <p style="margin-bottom: 20px; color: #64748b; font-size: 0.95rem;">Manage live stream status, event flyers, bookings, prayer requests, and site branding below:</p>
+            
+            <!-- LIVE STREAM CONTROL -->
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">🔴 Live Stream Control</h3>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Broadcast Status:</label>
+                    <select id="input-is-live">
+                        <option value="false">🔴 Offline (No service right now)</option>
+                        <option value="true">🟢 LIVE (Service is currently broadcasting!)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Live Embed URL (YouTube embed link or iframe source):</label>
+                    <input type="text" id="input-live-embed" placeholder="e.g., https://www.youtube.com/embed/YOUR_LIVE_VIDEO_ID">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>External Stream Link (YouTube / Facebook URL):</label>
+                    <input type="text" id="input-live-external" placeholder="e.g., https://youtube.com/@pullerschapel/live">
+                </div>
+            </div>
+
+            <!-- APPOINTMENTS BOOKINGS ADMIN SECTION -->
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color: var(--primary-color);">📅 Pastor Appointment Bookings</h3>
+                <span id="total-appt-badge" style="background: var(--accent-color); color: var(--primary-color); font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">0 Total Requests</span>
+            </div>
+            <div id="admin-appointments-container" style="margin-bottom: 30px;">
+                <p style="color: #64748b; font-size: 0.95rem; font-style: italic;">No appointment requests yet.</p>
+            </div>
+
+            <!-- EVENT FLYER UPLOAD ADMIN SECTION -->
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">📅 Post Event Flyer</h3>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Event Title:</label>
+                    <input type="text" id="input-event-title" placeholder="e.g., Revival Sunday">
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Event Date / Tag:</label>
+                    <input type="text" id="input-event-date" placeholder="e.g., This Sunday @ 9:00 AM">
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Event Description:</label>
+                    <textarea id="input-event-desc" rows="3" placeholder="Brief details about the event..."></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Upload Event Flyer Image File:</label>
+                    <input type="file" id="input-event-flyer-img" accept="image/*">
+                </div>
+                <button class="btn" style="width: 100%; padding: 10px;" onclick="uploadEventFlyer()">Publish Event Flyer</button>
+            </div>
+
+            <!-- EXISTING EVENTS LIST MANAGER -->
+            <h4 style="color: var(--primary-color); margin-bottom: 12px; font-size: 1.1rem;">Manage Published Event Flyers</h4>
+            <div id="admin-events-list" style="margin-bottom: 30px;">
+                <p style="color: #64748b; font-size: 0.9rem; font-style: italic;">No custom event flyers published yet.</p>
+            </div>
+
+            <!-- EVENT RSVPS & REGISTRATIONS LIST -->
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color: var(--primary-color);">📋 Event RSVPs & Registrations</h3>
+                <span id="total-rsvp-badge" style="background: var(--accent-color); color: var(--primary-color); font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">0 Total Guests</span>
+            </div>
+            <div id="admin-rsvps-container" style="margin-bottom: 30px;">
+                <p style="color: #64748b; font-size: 0.95rem; font-style: italic;">No event registrations yet.</p>
+            </div>
+
+            <!-- PRAYER & TESTIMONY MODERATION QUEUE -->
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">📥 Pending Prayer Requests & Testimonies Queue</h3>
+            <div id="admin-pending-container" style="margin-bottom: 30px;">
+                <p style="color: #64748b; font-size: 0.95rem;">No pending submissions right now.</p>
+            </div>
+
+            <div class="form-group">
+                <label>Ministry / Logo Name:</label>
+                <input type="text" id="input-logo" value="Pullers Chapel">
+            </div>
+            <div class="form-group">
+                <label>Upload Church Logo (Image File):</label>
+                <input type="file" id="input-logo-img" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Upload Website Background Hero Image (Image File):</label>
+                <input type="file" id="input-hero-bg" accept="image/*">
+            </div>
+
+            <!-- ANNOUNCEMENTS ADMIN SECTION -->
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">Manage Announcements</h3>
+            
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Announcement 1</h4>
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label>Date / Tag:</label>
+                    <input type="text" id="input-ann-date-1" value="Posted Recently">
+                </div>
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label>Title:</label>
+                    <input type="text" id="input-ann-title-1" value="Special Midweek Fasting & Prayer">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Message Content:</label>
+                    <textarea id="input-ann-body-1" rows="3">Join us this Wednesday at 6:00 PM as we gather for an empowering time of intense prayer and intercession for our families and community.</textarea>
+                </div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Announcement 2</h4>
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label>Date / Tag:</label>
+                    <input type="text" id="input-ann-date-2" value="Upcoming Event">
+                </div>
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label>Title:</label>
+                    <input type="text" id="input-ann-title-2" value="Youth Ministry Outreach Sunday">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Message Content:</label>
+                    <textarea id="input-ann-body-2" rows="3">Our youth department is hosting a special outreach service this coming Sunday. Come ready to bless lives and fellowship with powerful testimonies!</textarea>
+                </div>
+            </div>
+
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <div class="form-group" style="background: #f0fdf4; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                <label style="color: #166534; font-weight: bold;">Online Giving Gateway URL:</label>
+                <input type="text" id="input-giving-link" value="#" placeholder="Paste payment platform link here">
+            </div>
+            <div class="form-group" style="background: #f0fdf4; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                <label style="color: #166534; font-weight: bold;">Upload Scannable MoMo / Payment QR Code (Image File):</label>
+                <input type="file" id="input-qr-img" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>Home Main Heading:</label>
+                <input type="text" id="input-home-heading" value="Welcome Home">
+            </div>
+            <div class="form-group">
+                <label>Home Subtext:</label>
+                <textarea id="input-home-subtext" rows="3">A vibrant community of faith, hope, and love. Join us this week as we worship together and grow in God's word.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Pastor Name:</label>
+                <input type="text" id="input-pastor-name" value="Pastor Emmanuel Ofori">
+            </div>
+            <div class="form-group">
+                <label>Upload Pastor Photo (Image File):</label>
+                <input type="file" id="input-pastor-img" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Upload Pastor Section Background Image File:</label>
+                <input type="file" id="input-pastor-section-bg" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Pastor Biography (Full Bio for Read More):</label>
+                <textarea id="input-pastor-bio" rows="6">Pastor Emmanuel has dedicated over 15 years to pastoral ministry, teaching, and leadership development. With a deep passion for prayer and community transformation, he leads Pullers Chapel with a vision to help every believer discover and walk in their divine purpose. He is happily married with children and travels extensively teaching the Word of God with signs following.</textarea>
+            </div>
+            
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">Edit About Page Content</h3>
+            <div class="form-group">
+                <label>About Heading:</label>
+                <input type="text" id="input-about-heading" value="About Pullers Chapel">
+            </div>
+            <div class="form-group">
+                <label>Ministry Description:</label>
+                <textarea id="input-about-desc" rows="3">Pullers Chapel is dedicated to spreading the gospel, nurturing spiritual growth, and serving our local community with love and compassion.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Our Mission:</label>
+                <textarea id="input-about-mission" rows="3">To win souls for Christ, build believers in the faith, and impact generations through the power of the Holy Spirit.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Our Vision:</label>
+                <textarea id="input-about-vision" rows="3">To be a beacon of hope and a thriving spiritual home reaching communities globally.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Our Core Values:</label>
+                <textarea id="input-about-values" rows="4">1. Christ-Centeredness
+2. Uncompromising Word of God
+3. Authentic Fellowship
+4. Compassionate Outreach</textarea>
+            </div>
+
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">Publish Daily Devotional</h3>
+            <div class="form-group">
+                <label>Devotional Title:</label>
+                <input type="text" id="input-dev-title" value="Strength in Quietness">
+            </div>
+            <div class="form-group">
+                <label>Scripture Verse:</label>
+                <input type="text" id="input-dev-verse" value='"In quietness and confidence shall be your strength." - Isaiah 30:15'>
+            </div>
+            <div class="form-group">
+                <label>Devotional Message / Body:</label>
+                <textarea id="input-dev-body" rows="4">True spiritual breakthrough often begins when we quiet the noise of the world and spend intentional time in God's presence. Today, let go of anxiety and trust in His unfailing grace.</textarea>
+            </div>
+
+            <button class="save-btn" onclick="saveChanges()">Save Changes to Website</button>
+        </div>
+    </section>
+
+    <!-- FULL BIO MODAL -->
+    <div id="full-bio-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.2); position: relative;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img id="modal-pastor-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid var(--accent-color); margin-bottom: 10px;" alt="Pastor">
+                <h2 id="modal-pastor-name" style="color: var(--primary-color);">Pastor Emmanuel Ofori</h2>
+                <span style="color: #64748b; font-size: 0.9rem;">Senior Pastor, Pullers Chapel Ministry</span>
+            </div>
+            <div id="modal-pastor-bio-text" style="color: #334155; font-size: 1rem; line-height: 1.7; margin-bottom: 25px; white-space: pre-line;">
+                Pastor Emmanuel has dedicated over 15 years to pastoral ministry, teaching, and leadership development. With a deep passion for prayer and community transformation, he leads Pullers Chapel with a vision to help every believer discover and walk in their divine purpose. He is happily married with children and travels extensively teaching the Word of God with signs following.
+            </div>
+            <div style="text-align: center;">
+                <button class="btn" style="padding: 10px 25px;" onclick="closeFullBioModal()">Close Biography</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE FLOATING ACTION BAR -->
+    <div class="mobile-float-bar no-print">
+        <button onclick="switchTab('live')" class="float-btn live-action">🔴 Watch</button>
+        <button onclick="switchTab('appointment')" class="float-btn appnt-action">📅 Book</button>
+        <button onclick="switchTab('giving')" class="float-btn give-action">💳 Give</button>
+        <button onclick="switchTab('prayer')" class="float-btn pray-action">🙏 Prayer</button>
+    </div>
+
+    <!-- RSVP MODAL -->
+    <div id="rsvp-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; padding: 25px; border-radius: 12px; max-width: 420px; width: 100%; box-shadow: 0 15px 35px rgba(0,0,0,0.2); position: relative;">
+            <h3 style="color: var(--primary-color); margin-bottom: 5px;">🎟️ Event Registration</h3>
+            <p id="rsvp-event-title" style="color: var(--accent-color); font-weight: bold; margin-bottom: 15px; font-size: 1rem;"></p>
+            
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label>Full Name:</label>
+                <input type="text" id="rsvp-name" placeholder="e.g., Grace Mensah">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label>Phone / WhatsApp Number:</label>
+                <input type="text" id="rsvp-phone" placeholder="e.g., 024 123 4567">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>Number of Guests (including you):</label>
+                <input type="number" id="rsvp-guests" value="1" min="1" max="20">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" style="flex: 1; padding: 10px;" onclick="submitRsvp()">Confirm RSVP</button>
+                <button class="btn" style="background: #e2e8f0; color: #334155; padding: 10px;" onclick="closeRsvpModal()">Cancel</button>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Grace & Truth Ministry. All rights reserved.</p>
+        <p>&copy; 2026 Pullers Chapel Ministry. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">YouTube</a>
+            <a href="#">Instagram</a>
+        </div>
+        <div>
+            <a class="admin-footer-link" onclick="promptAdminLogin()">🔒 Admin Portal</a>
+        </div>
     </footer>
 
+    <script>
+        // Mobile Navigation Toggle
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.toggle('show');
+        }
+
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.remove('show');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            const navTab = document.getElementById('nav-' + tabId);
+            if(navTab) navTab.classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+
+        // Full Bio Modal Logic
+        function openFullBioModal() {
+            const pName = localStorage.getItem('pastorName') || 'Pastor Emmanuel Ofori';
+            const pBio = localStorage.getItem('pastorBio') || document.getElementById('home-pastor-bio').innerText;
+            const pImg = localStorage.getItem('pastorImg') || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80';
+
+            document.getElementById('modal-pastor-name').innerText = pName;
+            document.getElementById('modal-pastor-bio-text').innerText = pBio;
+            document.getElementById('modal-pastor-img').src = pImg;
+
+            document.getElementById('full-bio-modal').style.display = 'flex';
+        }
+
+        function closeFullBioModal() {
+            document.getElementById('full-bio-modal').style.display = 'none';
+        }
+
+        // Secure Admin Login Prompt
+        function promptAdminLogin() {
+            const username = prompt("Enter Admin Login ID:");
+            if (username === null) return;
+
+            const password = prompt("Enter Admin Password:");
+            if (password === null) return;
+
+            if (username.trim() === "admin" && password.trim() === "pullers2026") {
+                alert("Login successful!");
+                switchTab('admin');
+            } else {
+                alert("Invalid Login ID or Password. Access denied.");
+            }
+        }
+
+        // Click-to-copy helper
+        function copyToClipboard(text, label) {
+            navigator.clipboard.writeText(text);
+            alert(`${label} (${text}) copied to clipboard!`);
+        }
+
+        // Receipt Generator
+        function generateReceipt() {
+            const name = document.getElementById('rec-name').value.trim();
+            const amount = document.getElementById('rec-amount').value.trim();
+            const type = document.getElementById('rec-type').value;
+
+            if(!name || !amount) {
+                alert('Please enter your name and amount to generate your receipt.');
+                return;
+            }
+
+            document.getElementById('r-name-val').innerText = name;
+            document.getElementById('r-amount-val').innerText = amount;
+            document.getElementById('r-type-val').innerText = type;
+            document.getElementById('r-date').innerText = new Date().toLocaleDateString();
+            document.getElementById('r-no').innerText = 'PC-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('receipt-church-name').innerText = document.getElementById('brand-logo').innerText;
+
+            document.getElementById('receipt-box').style.display = 'block';
+            document.getElementById('receipt-box').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeReceipt() {
+            document.getElementById('receipt-box').style.display = 'none';
+        }
+
+        // --- APPOINTMENT BOOKING LOGIC ---
+        function submitAppointmentRequest() {
+            const name = document.getElementById('appt-name').value.trim();
+            const phone = document.getElementById('appt-phone').value.trim();
+            const email = document.getElementById('appt-email').value.trim();
+            const type = document.getElementById('appt-type').value;
+            const datetime = document.getElementById('appt-datetime').value;
+            const notes = document.getElementById('appt-notes').value.trim();
+
+            if (!name || !phone || !datetime) {
+                alert('Please fill in your name, phone number, and preferred date & time.');
+                return;
+            }
+
+            let apptList = JSON.parse(localStorage.getItem('pastorAppointments')) || [];
+            apptList.push({
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                email: email,
+                type: type,
+                datetime: datetime,
+                notes: notes,
+                dateSubmitted: new Date().toLocaleDateString()
+            });
+
+            localStorage.setItem('pastorAppointments', JSON.stringify(apptList));
+            alert(`Thank you, ${name}! Your appointment request for "${type}" has been submitted. The church office will contact you soon.`);
+            
+            document.getElementById('appt-name').value = '';
+            document.getElementById('appt-phone').value = '';
+            document.getElementById('appt-email').value = '';
+            document.getElementById('appt-datetime').value = '';
+            document.getElementById('appt-notes').value = '';
+
+            loadAdminAppointments();
+            switchTab('home');
+        }
+
+        function loadAdminAppointments() {
+            const container = document.getElementById('admin-appointments-container');
+            const badge = document.getElementById('total-appt-badge');
+            let apptList = JSON.parse(localStorage.getItem('pastorAppointments')) || [];
+
+            badge.innerText = `${apptList.length} Total Request${apptList.length === 1 ? '' : 's'}`;
+
+            if (apptList.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-size: 0.95rem; font-style: italic;">No appointment requests yet.</p>';
+                return;
+            }
+
+            let html = '';
+            apptList.forEach((item, index) => {
+                html += `
+                    <div class="submission-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <span style="font-size: 0.75rem; background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${item.type}</span>
+                            <h4 style="margin: 6px 0 2px 0; color: var(--primary-color);">${item.name} <span style="font-weight: normal; font-size: 0.85rem; color: #475569;">(🕒 ${item.datetime.replace('T', ' ')})</span></h4>
+                            <p style="font-size: 0.85rem; color: #64748b;">📞 ${item.phone} ${item.email ? '• ✉️ ' + item.email : ''}</p>
+                            ${item.notes ? `<p style="font-size: 0.85rem; color: #334155; margin-top: 4px; font-style: italic;">Note: "${item.notes}"</p>` : ''}
+                        </div>
+                        <button class="delete-btn" onclick="deleteAppointment(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function deleteAppointment(index) {
+            let apptList = JSON.parse(localStorage.getItem('pastorAppointments')) || [];
+            apptList.splice(index, 1);
+            localStorage.setItem('pastorAppointments', JSON.stringify(apptList));
+            loadAdminAppointments();
+        }
+
+        // --- LIVE STREAM DISPLAY LOGIC ---
+        function loadLiveStreamData() {
+            const isLive = localStorage.getItem('isLive') === 'true';
+            const embedUrl = localStorage.getItem('liveEmbedUrl') || '';
+            const externalUrl = localStorage.getItem('liveExternalUrl') || 'https://youtube.com';
+
+            const statusIndicator = document.getElementById('live-status-indicator');
+            const playerBox = document.getElementById('live-player-box');
+            const extLink = document.getElementById('external-stream-link');
+
+            extLink.href = externalUrl;
+            document.getElementById('input-is-live').value = isLive ? 'true' : 'false';
+            document.getElementById('input-live-embed').value = embedUrl;
+            document.getElementById('input-live-external').value = externalUrl;
+
+            if (isLive) {
+                statusIndicator.className = 'live-badge';
+                statusIndicator.innerHTML = '<span style="width: 10px; height: 10px; border-radius: 50%; background: #dc2626; display: inline-block;"></span><span>SERVICE IS LIVE NOW 🔴</span>';
+                
+                if (embedUrl) {
+                    playerBox.innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+                } else {
+                    playerBox.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; color: white; padding: 40px; text-align: center;">
+                            <h3 style="color: var(--accent-color); margin-bottom: 10px;">🔴 We Are Live!</h3>
+                            <p style="margin-bottom: 20px;">Click below to join our live broadcast stream.</p>
+                            <a href="${externalUrl}" target="_blank" class="btn">Open Live Stream in New Tab</a>
+                        </div>
+                    `;
+                }
+            } else {
+                statusIndicator.className = 'offline-badge';
+                statusIndicator.innerHTML = '<span style="width: 10px; height: 10px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span><span>Service is currently OFFLINE</span>';
+                playerBox.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; color: #94a3b8; padding: 40px; text-align: center;">
+                        <h3 style="color: white; margin-bottom: 10px;">Stream is Offline</h3>
+                        <p>Check back during service times (Sundays @ 9:00 AM) or watch our previous sermons.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // --- RSVP MODAL & STORAGE LOGIC ---
+        let currentRsvpEvent = '';
+
+        function openRsvpModal(eventTitle) {
+            currentRsvpEvent = eventTitle;
+            document.getElementById('rsvp-event-title').innerText = eventTitle;
+            document.getElementById('rsvp-modal').style.display = 'flex';
+        }
+
+        function closeRsvpModal() {
+            document.getElementById('rsvp-modal').style.display = 'none';
+            document.getElementById('rsvp-name').value = '';
+            document.getElementById('rsvp-phone').value = '';
+            document.getElementById('rsvp-guests').value = '1';
+        }
+
+        function submitRsvp() {
+            const name = document.getElementById('rsvp-name').value.trim();
+            const phone = document.getElementById('rsvp-phone').value.trim();
+            const guests = parseInt(document.getElementById('rsvp-guests').value) || 1;
+
+            if (!name || !phone) {
+                alert('Please enter your name and phone number to register.');
+                return;
+            }
+
+            let rsvpList = JSON.parse(localStorage.getItem('eventRsvps')) || [];
+            rsvpList.push({
+                id: Date.now(),
+                eventTitle: currentRsvpEvent,
+                name: name,
+                phone: phone,
+                guests: guests,
+                date: new Date().toLocaleDateString()
+            });
+
+            localStorage.setItem('eventRsvps', JSON.stringify(rsvpList));
+            alert(`Thank you, ${name}! Your RSVP for "${currentRsvpEvent}" (${guests} seat${guests > 1 ? 's' : ''}) is confirmed.`);
+            closeRsvpModal();
+            loadAdminRsvps();
+        }
+
+        function loadAdminRsvps() {
+            const container = document.getElementById('admin-rsvps-container');
+            const badge = document.getElementById('total-rsvp-badge');
+            let rsvpList = JSON.parse(localStorage.getItem('eventRsvps')) || [];
+
+            const totalGuests = rsvpList.reduce((sum, item) => sum + (item.guests || 1), 0);
+            badge.innerText = `${totalGuests} Total Guest${totalGuests === 1 ? '' : 's'}`;
+
+            if (rsvpList.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-size: 0.95rem; font-style: italic;">No event registrations yet.</p>';
+                return;
+            }
+
+            let html = '';
+            rsvpList.forEach((item, index) => {
+                html += `
+                    <div class="submission-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <span style="font-size: 0.75rem; background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${item.eventTitle}</span>
+                            <h4 style="margin: 6px 0 2px 0; color: var(--primary-color);">${item.name} <span style="font-weight: normal; font-size: 0.85rem; color: #475569;">(${item.guests} seat${item.guests > 1 ? 's' : ''})</span></h4>
+                            <p style="font-size: 0.85rem; color: #64748b;">📞 ${item.phone} • Registered on ${item.date}</p>
+                        </div>
+                        <button class="delete-btn" onclick="deleteRsvp(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function deleteRsvp(index) {
+            let rsvpList = JSON.parse(localStorage.getItem('eventRsvps')) || [];
+            rsvpList.splice(index, 1);
+            localStorage.setItem('eventRsvps', JSON.stringify(rsvpList));
+            loadAdminRsvps();
+        }
+
+        // --- EVENT FLYER UPLOADER HANDLER ---
+        function uploadEventFlyer() {
+            const title = document.getElementById('input-event-title').value.trim();
+            const dateTag = document.getElementById('input-event-date').value.trim();
+            const desc = document.getElementById('input-event-desc').value.trim();
+            const flyerFile = document.getElementById('input-event-flyer-img').files[0];
+
+            if(!title || !flyerFile) {
+                alert('Please provide an event title and select an image flyer file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const flyerUrl = e.target.result;
+                let eventsList = JSON.parse(localStorage.getItem('churchEvents')) || [];
+                
+                const newEvent = {
+                    id: Date.now(),
+                    title: title,
+                    dateTag: dateTag || 'Upcoming Event',
+                    desc: desc,
+                    imgUrl: flyerUrl
+                };
+
+                eventsList.push(newEvent);
+                localStorage.setItem('churchEvents', JSON.stringify(eventsList));
+
+                alert('Event flyer uploaded and published successfully!');
+                document.getElementById('input-event-title').value = '';
+                document.getElementById('input-event-date').value = '';
+                document.getElementById('input-event-desc').value = '';
+                document.getElementById('input-event-flyer-img').value = '';
+
+                loadAdminEventsList();
+                loadPublicEvents();
+            };
+            reader.readAsDataURL(flyerFile);
+        }
+
+        function loadAdminEventsList() {
+            const container = document.getElementById('admin-events-list');
+            let eventsList = JSON.parse(localStorage.getItem('churchEvents')) || [];
+
+            if(eventsList.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-size: 0.9rem; font-style: italic;">No custom event flyers published yet.</p>';
+                return;
+            }
+
+            let html = '';
+            eventsList.forEach((ev, index) => {
+                html += `
+                    <div class="submission-card" style="display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <img src="${ev.imgUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;" alt="Flyer">
+                        <div style="flex: 1; min-width: 150px;">
+                            <h4 style="color: var(--primary-color); font-size: 0.95rem;">${ev.title}</h4>
+                            <span style="font-size: 0.75rem; color: #64748b;">${ev.dateTag}</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteEvent(${index})">Delete</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function deleteEvent(index) {
+            let eventsList = JSON.parse(localStorage.getItem('churchEvents')) || [];
+            eventsList.splice(index, 1);
+            localStorage.setItem('churchEvents', JSON.stringify(eventsList));
+            loadAdminEventsList();
+            loadPublicEvents();
+            alert('Event flyer removed.');
+        }
+
+        function loadPublicEvents() {
+            const container = document.getElementById('public-events-container');
+            let eventsList = JSON.parse(localStorage.getItem('churchEvents')) || [];
+
+            if(eventsList.length === 0) {
+                container.innerHTML = `
+                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase;">This Sunday</span>
+                            <h3 style="margin: 6px 0 10px 0; color: var(--primary-color); font-size: 1.2rem;">Annual Thanksgiving & Family Service</h3>
+                            <p style="color: #334155; font-size: 0.95rem; margin-bottom: 20px;">Join us this Sunday as we celebrate God's goodness throughout the year with special testimonies, powerful worship, and family dedication.</p>
+                        </div>
+                        <button class="btn" style="width: 100%; padding: 10px; font-size: 0.9rem;" onclick="openRsvpModal('Annual Thanksgiving & Family Service')">🎟️ Register / RSVP</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            eventsList.forEach(ev => {
+                const safeTitle = ev.title.replace(/'/g, "\\'");
+                html += `
+                    <div class="event-card">
+                        <img src="${ev.imgUrl}" class="event-img" alt="Event Flyer">
+                        <div class="event-content">
+                            <div>
+                                <span style="font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase;">${ev.dateTag}</span>
+                                <h3 style="margin: 6px 0 10px 0; color: var(--primary-color); font-size: 1.2rem;">${ev.title}</h3>
+                                <p style="color: #334155; font-size: 0.95rem; margin-bottom: 20px;">${ev.desc}</p>
+                            </div>
+                            <button class="btn" style="width: 100%; padding: 10px; font-size: 0.9rem;" onclick="openRsvpModal('${safeTitle}')">🎟️ Register / RSVP</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function submitPrayerForm() {
+            const name = document.getElementById('prayer-name').value.trim();
+            const type = document.getElementById('prayer-type').value;
+            const msg = document.getElementById('prayer-msg').value.trim();
+
+            if(!name || !msg) {
+                alert('Please fill in your name and message.');
+                return;
+            }
+
+            let pendingList = JSON.parse(localStorage.getItem('pendingSubmissions')) || [];
+            const newItem = {
+                id: Date.now(),
+                name: name,
+                type: type,
+                msg: msg,
+                date: new Date().toLocaleDateString(),
+                likes: 0
+            };
+            pendingList.push(newItem);
+            localStorage.setItem('pendingSubmissions', JSON.stringify(pendingList));
+
+            alert(`Thank you, ${name}. Your ${type.toLowerCase()} has been submitted successfully!`);
+            document.getElementById('prayer-name').value = '';
+            document.getElementById('prayer-msg').value = '';
+            loadAdminPendingQueue();
+        }
+
+        function loadAdminPendingQueue() {
+            const container = document.getElementById('admin-pending-container');
+            let pendingList = JSON.parse(localStorage.getItem('pendingSubmissions')) || [];
+
+            if(pendingList.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-style: italic; font-size: 0.9rem;">No pending submissions right now.</p>';
+                return;
+            }
+
+            let html = '';
+            pendingList.forEach((item, index) => {
+                html += `
+                    <div class="submission-card">
+                        <span style="font-size: 0.75rem; background: var(--primary-color); color: white; padding: 2px 6px; border-radius: 4px;">${item.type}</span>
+                        <h4 style="margin: 6px 0; color: var(--primary-color); font-size: 1rem;">${item.name} <span style="font-weight: normal; font-size: 0.8rem; color: #64748b;">(${item.date})</span></h4>
+                        <p style="color: #334155; font-size: 0.9rem; margin-bottom: 10px;">${item.msg}</p>
+                        <div class="action-row">
+                            ${item.type.includes('Testimony') ? `<button class="approve-btn" onclick="approveSubmission(${index})">Approve & Publish</button>` : '<span style="font-size: 0.85rem; color: #2563eb; font-weight: bold; align-self: center;">Private Prayer Request</span>'}
+                            <button class="delete-btn" onclick="deleteSubmission(${index})">Delete / Dismiss</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function approveSubmission(index) {
+            let pendingList = JSON.parse(localStorage.getItem('pendingSubmissions')) || [];
+            let approvedList = JSON.parse(localStorage.getItem('approvedTestimonies')) || [];
+
+            const approvedItem = pendingList.splice(index, 1)[0];
+            approvedList.push(approvedItem);
+
+            localStorage.setItem('pendingSubmissions', JSON.stringify(pendingList));
+            localStorage.setItem('approvedTestimonies', JSON.stringify(approvedList));
+
+            loadAdminPendingQueue();
+            loadHomeTestimonies();
+            alert('Testimony approved and published live to the home page!');
+        }
+
+        function deleteSubmission(index) {
+            let pendingList = JSON.parse(localStorage.getItem('pendingSubmissions')) || [];
+            pendingList.splice(index, 1);
+            localStorage.setItem('pendingSubmissions', JSON.stringify(pendingList));
+            loadAdminPendingQueue();
+            alert('Submission removed.');
+        }
+
+        function loadHomeTestimonies() {
+            const container = document.getElementById('home-testimonies-container');
+            let approvedList = JSON.parse(localStorage.getItem('approvedTestimonies')) || [];
+
+            if(approvedList.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-style: italic; text-align: center; font-size: 0.95rem;">No approved testimonies yet. Check back soon or share your testimony in the Prayer tab!</p>';
+                return;
+            }
+
+            let html = '<div class="grid-2" style="max-width: 1000px; margin: 0 auto;">';
+            approvedList.forEach((item, index) => {
+                html += `
+                    <div class="card" style="border-left: 5px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h4 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 6px;">${item.name}'s Testimony <span style="font-size: 0.75rem; color: #64748b; font-weight: normal;">• ${item.date}</span></h4>
+                            <p style="color: #334155; font-size: 0.95rem; margin-bottom: 20px;">"${item.msg}"</p>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; align-items: center;">
+                            <button class="love-btn" onclick="likeTestimony(${index})">
+                                ❤️ <span id="like-count-${index}">${item.likes || 0}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function likeTestimony(index) {
+            let approvedList = JSON.parse(localStorage.getItem('approvedTestimonies')) || [];
+            if(approvedList[index]) {
+                approvedList[index].likes = (approvedList[index].likes || 0) + 1;
+                localStorage.setItem('approvedTestimonies', JSON.stringify(approvedList));
+                loadHomeTestimonies();
+            }
+        }
+
+        function shareDevotional() {
+            const churchName = document.getElementById('brand-logo').innerText;
+            const title = document.getElementById('dev-title').innerText;
+            const verse = document.getElementById('dev-verse').innerText;
+            const body = document.getElementById('dev-body').innerText;
+            const shareText = `📌 *${churchName} Daily Devotional*\n\n*${title}*\n${verse}\n\n${body}\n\n🙏 Be blessed!`;
+
+            if (navigator.share) {
+                navigator.share({ title: title, text: shareText }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareText);
+                alert('Devotional copied to clipboard! You can paste it on WhatsApp.');
+            }
+        }
+
+        window.onload = function() {
+            loadAdminPendingQueue();
+            loadHomeTestimonies();
+            loadAdminEventsList();
+            loadPublicEvents();
+            loadAdminRsvps();
+            loadAdminAppointments();
+            loadLiveStreamData();
+
+            if(localStorage.getItem('logoText')) {
+                const logoText = localStorage.getItem('logoText');
+                document.getElementById('brand-logo').innerText = logoText;
+                document.getElementById('dev-church-name').innerText = logoText + " Daily Devotional";
+                document.getElementById('input-logo').value = logoText;
+            }
+            if(localStorage.getItem('logoImg')) {
+                const imgUrl = localStorage.getItem('logoImg');
+                document.getElementById('nav-logo-img').src = imgUrl;
+                document.getElementById('nav-logo-img').style.display = 'block';
+                document.getElementById('dev-logo-stamp').src = imgUrl;
+                document.getElementById('dev-logo-stamp').style.display = 'block';
+            }
+            if(localStorage.getItem('qrImg')) {
+                const qrUrl = localStorage.getItem('qrImg');
+                document.getElementById('display-qr-img').src = qrUrl;
+                document.getElementById('display-qr-img').style.display = 'block';
+                document.getElementById('no-qr-text').style.display = 'none';
+            }
+            if(localStorage.getItem('heroBg')) {
+                const bgUrl = localStorage.getItem('heroBg');
+                document.getElementById('home-hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('${bgUrl}') center/cover`;
+            }
+            if(localStorage.getItem('pastorSectionBg')) {
+                const pSecBg = localStorage.getItem('pastorSectionBg');
+                document.getElementById('pastor-section-bg').style.background = `linear-gradient(rgba(26,54,93,0.25), rgba(26,54,93,0.25)), url('${pSecBg}') center/cover`;
+            }
+            if(localStorage.getItem('givingLink')) {
+                const gLink = localStorage.getItem('givingLink');
+                document.getElementById('giving-platform-link').href = gLink;
+                document.getElementById('input-giving-link').value = gLink;
+            }
+            if(localStorage.getItem('annDate1')) {
+                document.getElementById('ann-date-1').innerText = localStorage.getItem('annDate1');
+                document.getElementById('input-ann-date-1').value = localStorage.getItem('annDate1');
+            }
+            if(localStorage.getItem('annTitle1')) {
+                document.getElementById('ann-title-1').innerText = localStorage.getItem('annTitle1');
+                document.getElementById('input-ann-title-1').value = localStorage.getItem('annTitle1');
+            }
+            if(localStorage.getItem('annBody1')) {
+                document.getElementById('ann-body-1').innerText = localStorage.getItem('annBody1');
+                document.getElementById('input-ann-body-1').value = localStorage.getItem('annBody1');
+            }
+            if(localStorage.getItem('annDate2')) {
+                document.getElementById('ann-date-2').innerText = localStorage.getItem('annDate2');
+                document.getElementById('input-ann-date-2').value = localStorage.getItem('annDate2');
+            }
+            if(localStorage.getItem('annTitle2')) {
+                document.getElementById('ann-title-2').innerText = localStorage.getItem('annTitle2');
+                document.getElementById('input-ann-title-2').value = localStorage.getItem('annTitle2');
+            }
+            if(localStorage.getItem('annBody2')) {
+                document.getElementById('ann-body-2').innerText = localStorage.getItem('annBody2');
+                document.getElementById('input-ann-body-2').value = localStorage.getItem('annBody2');
+            }
+            if(localStorage.getItem('homeHeading')) {
+                document.getElementById('home-heading').innerText = localStorage.getItem('homeHeading');
+                document.getElementById('input-home-heading').value = localStorage.getItem('homeHeading');
+            }
+            if(localStorage.getItem('homeSubtext')) {
+                document.getElementById('home-subtext').innerText = localStorage.getItem('homeSubtext');
+                document.getElementById('input-home-subtext').value = localStorage.getItem('homeSubtext');
+            }
+            if(localStorage.getItem('pastorName')) {
+                const pName = localStorage.getItem('pastorName');
+                document.getElementById('home-pastor-name').innerText = pName;
+                document.getElementById('dev-pastor-name-stamp').innerText = pName.split(' ')[0] || pName;
+                document.getElementById('input-pastor-name').value = pName;
+            }
+            if(localStorage.getItem('pastorBio')) {
+                const pBio = localStorage.getItem('pastorBio');
+                document.getElementById('home-pastor-bio').innerText = pBio;
+                document.getElementById('input-pastor-bio').value = pBio;
+            }
+            if(localStorage.getItem('pastorImg')) {
+                const pImg = localStorage.getItem('pastorImg');
+                document.getElementById('home-pastor-img-display').src = pImg;
+                document.getElementById('dev-pastor-stamp-img').src = pImg;
+            }
+            if(localStorage.getItem('aboutHeading')) {
+                document.getElementById('about-page-heading').innerText = localStorage.getItem('aboutHeading');
+                document.getElementById('input-about-heading').value = localStorage.getItem('aboutHeading');
+            }
+            if(localStorage.getItem('aboutDesc')) {
+                document.getElementById('about-desc').innerText = localStorage.getItem('aboutDesc');
+                document.getElementById('input-about-desc').value = localStorage.getItem('aboutDesc');
+            }
+            if(localStorage.getItem('aboutMission')) {
+                document.getElementById('about-mission').innerText = localStorage.getItem('aboutMission');
+                document.getElementById('input-about-mission').value = localStorage.getItem('aboutMission');
+            }
+            if(localStorage.getItem('aboutVision')) {
+                document.getElementById('about-vision').innerText = localStorage.getItem('aboutVision');
+                document.getElementById('input-about-vision').value = localStorage.getItem('aboutVision');
+            }
+            if(localStorage.getItem('aboutValues')) {
+                document.getElementById('about-values').innerText = localStorage.getItem('aboutValues');
+                document.getElementById('input-about-values').value = localStorage.getItem('aboutValues');
+            }
+            if(localStorage.getItem('devTitle')) {
+                document.getElementById('dev-title').innerText = localStorage.getItem('devTitle');
+                document.getElementById('input-dev-title').value = localStorage.getItem('devTitle');
+            }
+            if(localStorage.getItem('devVerse')) {
+                document.getElementById('dev-verse').innerText = localStorage.getItem('devVerse');
+                document.getElementById('input-dev-verse').value = localStorage.getItem('devVerse');
+            }
+            if(localStorage.getItem('devBody')) {
+                document.getElementById('dev-body').innerText = localStorage.getItem('devBody');
+                document.getElementById('input-dev-body').value = localStorage.getItem('devBody');
+            }
+            if(localStorage.getItem('s1Title')) {
+                document.getElementById('sermon-1-title').innerText = localStorage.getItem('s1Title');
+                document.getElementById('input-sermon-1-title').value = localStorage.getItem('s1Title');
+            }
+            if(localStorage.getItem('s1Desc')) {
+                document.getElementById('sermon-1-desc').innerText = localStorage.getItem('s1Desc');
+                document.getElementById('input-sermon-1-desc').value = localStorage.getItem('s1Desc');
+            }
+            if(localStorage.getItem('s1Link')) {
+                document.getElementById('sermon-1-link').href = localStorage.getItem('s1Link');
+                document.getElementById('input-sermon-1-link').value = localStorage.getItem('s1Link');
+            }
+            if(localStorage.getItem('s2Title')) {
+                document.getElementById('sermon-2-title').innerText = localStorage.getItem('s2Title');
+                document.getElementById('input-sermon-2-title').value = localStorage.getItem('s2Title');
+            }
+            if(localStorage.getItem('s2Desc')) {
+                document.getElementById('sermon-2-desc').innerText = localStorage.getItem('s2Desc');
+                document.getElementById('input-sermon-2-desc').value = localStorage.getItem('s2Desc');
+            }
+            if(localStorage.getItem('s2Link')) {
+                document.getElementById('sermon-2-link').href = localStorage.getItem('s2Link');
+                document.getElementById('input-sermon-2-link').value = localStorage.getItem('s2Link');
+            }
+        };
+
+        function saveChanges() {
+            const logo = document.getElementById('input-logo').value;
+            const givingLink = document.getElementById('input-giving-link').value;
+            
+            const isLive = document.getElementById('input-is-live').value;
+            const liveEmbed = document.getElementById('input-live-embed').value.trim();
+            const liveExternal = document.getElementById('input-live-external').value.trim();
+
+            localStorage.setItem('isLive', isLive);
+            localStorage.setItem('liveEmbedUrl', liveEmbed);
+            localStorage.setItem('liveExternalUrl', liveExternal);
+
+            const annDate1 = document.getElementById('input-ann-date-1').value;
+            const annTitle1 = document.getElementById('input-ann-title-1').value;
+            const annBody1 = document.getElementById('input-ann-body-1').value;
+            const annDate2 = document.getElementById('input-ann-date-2').value;
+            const annTitle2 = document.getElementById('input-ann-title-2').value;
+            const annBody2 = document.getElementById('input-ann-body-2').value;
+
+            const hHeading = document.getElementById('input-home-heading').value;
+            const hSub = document.getElementById('input-home-subtext').value;
+            const pName = document.getElementById('input-pastor-name').value;
+            const pBio = document.getElementById('input-pastor-bio').value;
+            
+            const aHeading = document.getElementById('input-about-heading').value;
+            const aDesc = document.getElementById('input-about-desc').value;
+            const aMission = document.getElementById('input-about-mission').value;
+            const aVision = document.getElementById('input-about-vision').value;
+            const aValues = document.getElementById('input-about-values').value;
+
+            const dTitle = document.getElementById('input-dev-title').value;
+            const dVerse = document.getElementById('input-dev-verse').value;
+            const dBody = document.getElementById('input-dev-body').value;
+            
+            const s1Title = document.getElementById('input-sermon-1-title').value;
+            const s1Desc = document.getElementById('input-sermon-1-desc').value;
+            const s1Link = document.getElementById('input-sermon-1-link').value;
+            const s2Title = document.getElementById('input-sermon-2-title').value;
+            const s2Desc = document.getElementById('input-sermon-2-desc').value;
+            const s2Link = document.getElementById('input-sermon-2-link').value;
+
+            localStorage.setItem('logoText', logo);
+            localStorage.setItem('givingLink', givingLink);
+            localStorage.setItem('annDate1', annDate1);
+            localStorage.setItem('annTitle1', annTitle1);
+            localStorage.setItem('annBody1', annBody1);
+            localStorage.setItem('annDate2', annDate2);
+            localStorage.setItem('annTitle2', annTitle2);
+            localStorage.setItem('annBody2', annBody2);
+
+            localStorage.setItem('homeHeading', hHeading);
+            localStorage.setItem('homeSubtext', hSub);
+            localStorage.setItem('pastorName', pName);
+            localStorage.setItem('pastorBio', pBio);
+
+            localStorage.setItem('aboutHeading', aHeading);
+            localStorage.setItem('aboutDesc', aDesc);
+            localStorage.setItem('aboutMission', aMission);
+            localStorage.setItem('aboutVision', aVision);
+            localStorage.setItem('aboutValues', aValues);
+
+            localStorage.setItem('devTitle', dTitle);
+            localStorage.setItem('devVerse', dVerse);
+            localStorage.setItem('devBody', dBody);
+            
+            localStorage.setItem('s1Title', s1Title);
+            localStorage.setItem('s1Desc', s1Desc);
+            localStorage.setItem('s1Link', s1Link);
+            localStorage.setItem('s2Title', s2Title);
+            localStorage.setItem('s2Desc', s2Desc);
+            localStorage.setItem('s2Link', s2Link);
+
+            document.getElementById('brand-logo').innerText = logo;
+            document.getElementById('giving-platform-link').href = givingLink;
+            document.getElementById('dev-church-name').innerText = logo + " Daily Devotional";
+            
+            document.getElementById('ann-date-1').innerText = annDate1;
+            document.getElementById('ann-title-1').innerText = annTitle1;
+            document.getElementById('ann-body-1').innerText = annBody1;
+            document.getElementById('ann-date-2').innerText = annDate2;
+            document.getElementById('ann-title-2').innerText = annTitle2;
+            document.getElementById('ann-body-2').innerText = annBody2;
+
+            document.getElementById('home-heading').innerText = hHeading;
+            document.getElementById('home-subtext').innerText = hSub;
+            document.getElementById('home-pastor-name').innerText = pName;
+            document.getElementById('dev-pastor-name-stamp').innerText = pName.split(' ')[0] || pName;
+            document.getElementById('home-pastor-bio').innerText = pBio;
+
+            document.getElementById('about-page-heading').innerText = aHeading;
+            document.getElementById('about-desc').innerText = aDesc;
+            document.getElementById('about-mission').innerText = aMission;
+            document.getElementById('about-vision').innerText = aVision;
+            document.getElementById('about-values').innerText = aValues;
+
+            document.getElementById('dev-title').innerText = dTitle;
+            document.getElementById('dev-verse').innerText = dVerse;
+            document.getElementById('dev-body').innerText = dBody;
+
+            document.getElementById('sermon-1-title').innerText = s1Title;
+            document.getElementById('sermon-1-desc').innerText = s1Desc;
+            document.getElementById('sermon-1-link').href = s1Link;
+            document.getElementById('sermon-2-title').innerText = s2Title;
+            document.getElementById('sermon-2-desc').innerText = s2Desc;
+            document.getElementById('sermon-2-link').href = s2Link;
+
+            loadLiveStreamData();
+
+            const logoFile = document.getElementById('input-logo-img').files[0];
+            if (logoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('logoImg', e.target.result);
+                    document.getElementById('nav-logo-img').src = e.target.result;
+                    document.getElementById('nav-logo-img').style.display = 'block';
+                    document.getElementById('dev-logo-stamp').src = e.target.result;
+                    document.getElementById('dev-logo-stamp').style.display = 'block';
+                };
+                reader.readAsDataURL(logoFile);
+            }
+
+            const qrFile = document.getElementById('input-qr-img').files[0];
+            if (qrFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('qrImg', e.target.result);
+                    document.getElementById('display-qr-img').src = e.target.result;
+                    document.getElementById('display-qr-img').style.display = 'block';
+                    document.getElementById('no-qr-text').style.display = 'none';
+                };
+                reader.readAsDataURL(qrFile);
+            }
+
+            const bgFile = document.getElementById('input-hero-bg').files[0];
+            if (bgFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('heroBg', e.target.result);
+                    document.getElementById('home-hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('${e.target.result}') center/cover`;
+                };
+                reader.readAsDataURL(bgFile);
+            }
+
+            const pastorSecFile = document.getElementById('input-pastor-section-bg').files[0];
+            if (pastorSecFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('pastorSectionBg', e.target.result);
+                    document.getElementById('pastor-section-bg').style.background = `linear-gradient(rgba(26,54,93,0.25), rgba(26,54,93,0.25)), url('${e.target.result}') center/cover`;
+                };
+                reader.readAsDataURL(pastorSecFile);
+            }
+
+            const pastorFile = document.getElementById('input-pastor-img').files[0];
+            if (pastorFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('pastorImg', e.target.result);
+                    document.getElementById('home-pastor-img-display').src = e.target.result;
+                    document.getElementById('dev-pastor-stamp-img').src = e.target.result;
+                };
+                reader.readAsDataURL(pastorFile);
+            }
+
+            alert('Changes saved successfully! Switching back to Home.');
+            switchTab('home');
+        }
+    </script>
 </body>
 </html>
